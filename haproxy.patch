@@ -1,0 +1,26 @@
+--- src/haproxy.c.orig	2017-07-20 21:20:55.948835115 -0500
++++ src/haproxy.c	2017-07-20 21:23:13.646666888 -0500
+@@ -113,6 +113,7 @@
+ 
+ #ifdef USE_OPENSSL
+ #include <proto/ssl_sock.h>
++#include <openssl/crypto.h>
+ #endif
+ 
+ #ifdef USE_WURFL
+@@ -1792,6 +1793,15 @@
+ 	char errmsg[100];
+ 	int pidfd = -1;
+ 
++#ifdef USE_OPENSSL
++	if (!FIPS_mode_set(1)) {
++		fprintf(stderr,"error initializing FIPS mode\n");
++               ERR_load_crypto_strings();
++               ERR_print_errors_fp(stderr);
++		exit(1);
++	}
++	fprintf(stderr,"*** IN FIPS MODE ***\n");
++#endif
+ 	init(argc, argv);
+ 	signal_register_fct(SIGQUIT, dump, SIGQUIT);
+ 	signal_register_fct(SIGUSR1, sig_soft_stop, SIGUSR1);
