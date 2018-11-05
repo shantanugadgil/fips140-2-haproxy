@@ -19,7 +19,7 @@
 +               ERR_print_errors_fp(stderr);
 +		exit(1);
 +	}
-+	fprintf(stderr,"*** IN FIPS MODE ***\n");
++	fprintf(stderr,"*** HAPROXY IN FIPS MODE ***\n");
 +#endif
  	init(argc, argv);
  	signal_register_fct(SIGQUIT, dump, SIGQUIT);
